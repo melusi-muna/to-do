@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My To-do List</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="To-Do.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <h1><i class="fas fa-tasks"></i> Smart Todo</h1>
+                <p>Organize your day, boost your productivity</p>
+            </div>
+            <button id="theme-toggle" class="theme-toggle" aria-label="Toggle dark/light mode">
+                <i class="fas fa-moon"></i>
+                <span class="theme-text">Dark Mode</span>
+            </button>
+        </header>
+
+        <div class="app-container">
+            <!-- Sidebar -->
+            <aside class="sidebar">
+                <!-- Progress Section -->
+                <div class="progress-section">
+                    <h3>Today's Progress</h3>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progress-fill"></div>
+                    </div>
+                    <div class="progress-stats">
+                        <span id="completed-count">0</span> of <span id="total-count">0</span> tasks completed
+                    </div>
+                </div>
+
+                <!-- Notification Section -->
+                <div class="notification-section">
+                    <h3>Notifications</h3>
+                    <div class="notification-settings">
+                        <div class="setting-item">
+                            <label>
+                                <input type="checkbox" id="enable-notifications">
+                                Enable Notifications
+                            </label>
+                        </div>
+                        
+                        <div class="setting-item">
+                            <label for="phone-number">Phone Number (for SMS):</label>
+                            <input type="tel" id="phone-number" placeholder="+1234567890" required>
+                        </div>
+                        
+                        <div class="setting-item">
+                            <label for="reminder-time">Reminder Before Due:</label>
+                            <select id="reminder-time">
+                                <option value="5"Selected>5 minutes</option>
+                                <option value="10">10 minutes</option>
+                                <option value="15">15 minutes</option>
+                                <option value="30">30 minutes</option>
+                                <option value="60">1 hour</option>
+                            </select>
+                        </div>
+                        
+                        <button id="save-settings" class="save-btn">
+                            <i class="fas fa-save"></i> Save Settings
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Calendar Section -->
+                <div class="calendar-section">
+                    <h3>Calendar</h3>
+                    <div class="calendar">
+                        <div class="calendar-header">
+                            <button id="prev-month" aria-label="Previous month">
+                                <i class="fas fa-chevron-left"></i>
+                            </button>
+                            <span id="current-month">January 2025</span>
+                            <button id="next-month" aria-label="Next month">
+                                <i class="fas fa-chevron-right"></i>
+                            </button>
+                        </div>
+                        <div class="calendar-weekdays">
+                            <div>Sun</div><div>Mon</div><div>Tue</div><div>Wed</div><div>Thu</div><div>Fri</div><div>Sat</div>
+                        </div>
+                        <div class="calendar-days" id="calendar-days"></div>
+                    </div>
+                </div>
+
+                <!-- Task Statistics -->
+                <div class="stats-section">
+                    <h3>Quick Stats</h3>
+                    <div class="stat-item">
+                        <i class="fas fa-list"></i>
+                        <span>Total: <strong id="stats-total">0</strong></span>
+                    </div>
+                    <div class="stat-item">
+                        <i class="fas fa-play-circle"></i>
+                        <span>Active: <strong id="stats-active">0</strong></span>
+                    </div>
+                    <div class="stat-item">
+                        <i class="fas fa-check-circle"></i>
+                        <span>Completed: <strong id="stats-completed">0</strong></span>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- Main Content -->
+            <main class="main-content">
+                <!-- Add Task Section -->
+                <div class="add-task-section">
+                    <div class="input-group">
+                        <input type="text" id="task-input" placeholder="What needs to be done?" aria-label="New task description">
+                        <button id="add-task-btn"><i class="fas fa-plus"></i> Add Task</button>
+                    </div>
+                    
+                    <!-- Task Meta Inputs -->
+                    <div class="task-meta">
+                        <select id="priority-select" aria-label="Task priority level">
+                            <option value="low">Low Priority</option>
+                            <option value="medium" selected>Medium Priority</option>
+                            <option value="high">High Priority</option>
+                        </select>
+                        
+                        <div class="datetime-group">
+                            <input type="date" id="due-date" aria-label="Task due date">
+                            <input type="time" id="due-time" aria-label="Task due time">
+                        </div>
+                        
+                        <select id="category-select" aria-label="Task category">
+                            <option value="personal">Personal</option>
+                            <option value="work">Work</option>
+                            <option value="shopping">Shopping</option>
+                            <option value="health">Health</option>
+                        </select>
+
+                        <!-- Recurrence Selector -->
+                        <select id="recurrence-select" aria-label="Task repetition frequency">
+                            <option value="none">No Repeat</option>
+                            <option value="daily">Daily</option>
+                            <option value="weekly">Weekly</option>
+                            <option value="monthly">Monthly</option>
+                            <option value="yearly">Yearly</option>
+                            <option value="custom">Custom</option>
+                        </select>
+                        
+                        <!-- Custom recurrence input -->
+                        <div id="custom-recurrence" class="custom-recurrence-group">
+                            <input type="number" id="recurrence-interval" min="1" max="365" placeholder="Every X" value="1" aria-label="Recurrence interval number">
+                            <select id="recurrence-unit" aria-label="Recurrence time unit">
+                                <option value="days">Days</option>
+                                <option value="weeks">Weeks</option>
+                                <option value="months">Months</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Filter Section -->
+                <div class="filter-section">
+                    <div class="filter-buttons">
+                        <button class="filter-btn active" data-filter="all">All Tasks</button>
+                        <button class="filter-btn" data-filter="active">Active</button>
+                        <button class="filter-btn" data-filter="completed">Completed</button>
+                    </div>
+                    
+                    <div class="view-options">
+                        <button id="sort-by-date" class="view-btn">
+                            <i class="fas fa-sort-amount-down"></i> Sort by Date
+                        </button>
+                        <button id="sort-by-priority" class="view-btn">
+                            <i class="fas fa-exclamation-circle"></i> Sort by Priority
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Task List -->
+                <div class="task-list-section">
+                    <div class="task-list-header">
+                        <h3 id="task-list-title">All Tasks</h3>
+                        <span class="task-count" id="visible-task-count">0 tasks</span>
+                    </div>
+                    
+                    <div class="task-list" id="task-list">
+                        <!-- Tasks will be dynamically added here -->
+                        <div class="empty-state">
+                            <i class="fas fa-clipboard-list"></i>
+                            <h4>No tasks yet</h4>
+                            <p>Add your first task to get started!</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bulk Actions -->
+                <div class="bulk-actions" id="bulk-actions">
+                    <button id="delete-completed" class="bulk-btn">
+                        <i class="fas fa-trash"></i> Delete Completed
+                    </button>
+                    <button id="clear-all" class="bulk-btn clear-all">
+                        <i class="fas fa-broom"></i> Clear All
+                    </button>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Edit Task Modal -->
+    <div class="modal" id="edit-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Edit Task</h3>
+                <button class="close-modal" id="close-edit-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <input type="text" id="edit-task-input" placeholder="Task description" aria-label="Edit task description">
+                <div class="modal-meta">
+                    <select id="edit-priority" aria-label="Edit task priority level">
+                        <option value="low">Low Priority</option>
+                        <option value="medium">Medium Priority</option>
+                        <option value="high">High Priority</option>
+                    </select>
+                    
+                    <div class="datetime-group">
+                        <input type="date" id="edit-due-date" aria-label="Edit task due date">
+                        <input type="time" id="edit-due-time" aria-label="Edit task due time">
+                    </div>
+                    
+                    <select id="edit-category" aria-label="Edit task category">
+                        <option value="personal">Personal</option>
+                        <option value="work">Work</option>
+                        <option value="shopping">Shopping</option>
+                        <option value="health">Health</option>
+                    </select>
+
+                    <select id="edit-recurrence" aria-label="Edit task repetition frequency">
+                        <option value="none">No Repeat</option>
+                        <option value="daily">Daily</option>
+                        <option value="weekly">Weekly</option>
+                        <option value="monthly">Monthly</option>
+                        <option value="yearly">Yearly</option>
+                        <option value="custom">Custom</option>
+                    </select>
+                    
+                    <div id="edit-custom-recurrence" class="custom-recurrence-group">
+                        <input type="number" id="edit-recurrence-interval" min="1" max="365" placeholder="Every X" value="1" aria-label="Edit recurrence interval number">
+                        <select id="edit-recurrence-unit" aria-label="Edit recurrence time unit">
+                            <option value="days">Days</option>
+                            <option value="weeks">Weeks</option>
+                            <option value="months">Months</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" id="cancel-edit">Cancel</button>
+                <button class="btn-primary" id="save-edit">Save Changes</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="To-Do.js"></script>
+</body>
+</html>
